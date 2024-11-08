@@ -1,5 +1,7 @@
 import cv2
 import time
+from datetime import datetime
+import send_email
 
 # Start users webcam
 video = cv2.VideoCapture(0)
@@ -8,7 +10,10 @@ time.sleep(1)
 # Set first frame to None to store the first frame in the video stream
 first_frame = None
 
+status_list = []
+
 while True:
+    status = 0
     # Read the current frame from the video stream
     check, frame = video.read()
 
@@ -28,15 +33,27 @@ while True:
 
     # Set kernel for dilation
     dilate_frame = cv2.dilate(threshold_frame, None, 2)
-    #cv2.imshow("Webcam", dilate_frame)
 
     # Find contours in the dilated frame and draw bounding boxes around detected objects
     contours, check = cv2.findContours(dilate_frame, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     for contour in contours:
         if cv2.contourArea(contour) < 2000:
             continue
+        # There has been a motion detected
         x, y, w, h = cv2.boundingRect(contour)
-        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+        rectangle = cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+        if rectangle.any():
+            status = 1
+
+    # Send email if object has left the frame, based on the last two frame
+    status_list.append(status)
+    status_list = status_list[-2:]
+    if status_list[0] == 1 and status_list[1] == 0:
+        send_email.email("Test", "utf-8")
+
+    # Display current date and time on the frame
+    now = datetime.now()
+    cv2.putText(frame, f"{now.strftime("%d/%m/%Y %H:%M:%S")}", (10,30), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)
 
     # Show the final frame with detected objects and bounding boxes
     cv2.imshow("Webcam", frame)
