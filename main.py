@@ -1,5 +1,6 @@
 import cv2
 import time
+import glob
 from datetime import datetime
 import send_email
 
@@ -7,15 +8,17 @@ import send_email
 video = cv2.VideoCapture(0)
 time.sleep(1)
 
-# Set first frame to None to store the first frame in the video stream
+# Set up variables
 first_frame = None
-
 status_list = []
+count = 1
 
 while True:
     status = 0
     # Read the current frame from the video stream
     check, frame = video.read()
+    if not check:
+        print("Could not read the frame.")
 
     # Preprocess the frame by converting it to grayscale and applying Gaussian blurring
     grey_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -34,6 +37,11 @@ while True:
     # Set kernel for dilation
     dilate_frame = cv2.dilate(threshold_frame, None, 2)
 
+    # Display current date and time on the frame
+    now = datetime.now()
+    cv2.putText(frame, f"{now.strftime("%d/%m/%Y %H:%M:%S")}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
+                (0, 0, 255), 2)
+
     # Find contours in the dilated frame and draw bounding boxes around detected objects
     contours, check = cv2.findContours(dilate_frame, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     for contour in contours:
@@ -44,16 +52,17 @@ while True:
         rectangle = cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
         if rectangle.any():
             status = 1
+            cv2.imwrite(f"images/{count}.png", frame)
+            count += 1
+            all_images = glob.glob("images/*.png")
+            index = int(len(all_images) / 2)
+            middle_image = all_images[index]
 
     # Send email if object has left the frame, based on the last two frame
     status_list.append(status)
     status_list = status_list[-2:]
     if status_list[0] == 1 and status_list[1] == 0:
-        send_email.email("Test", "utf-8")
-
-    # Display current date and time on the frame
-    now = datetime.now()
-    cv2.putText(frame, f"{now.strftime("%d/%m/%Y %H:%M:%S")}", (10,30), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)
+        send_email.email(middle_image, "utf-8")
 
     # Show the final frame with detected objects and bounding boxes
     cv2.imshow("Webcam", frame)
