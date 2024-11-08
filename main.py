@@ -1,7 +1,9 @@
 import cv2
 import time
 import glob
+import os
 from datetime import datetime
+from threading import Thread
 import send_email
 
 # Start users webcam
@@ -12,6 +14,20 @@ time.sleep(1)
 first_frame = None
 status_list = []
 count = 1
+
+def clean_folder():
+    images = glob.glob("images/*.png")
+    for image in images:
+        os.remove(image)
+
+def email_callback():
+    clean_folder_thread = Thread(target=clean_folder)
+    clean_folder_thread.daemon = True
+    clean_folder_thread.start()
+
+def send_and_clean(image, encoding):
+    send_email.email(image, encoding)
+    email_callback()
 
 while True:
     status = 0
@@ -62,7 +78,9 @@ while True:
     status_list.append(status)
     status_list = status_list[-2:]
     if status_list[0] == 1 and status_list[1] == 0:
-        send_email.email(middle_image, "utf-8")
+        email_thread = Thread(target=send_and_clean, args=(middle_image, "utf-8"))
+        email_thread.daemon = True
+        email_thread.start()
 
     # Show the final frame with detected objects and bounding boxes
     cv2.imshow("Webcam", frame)

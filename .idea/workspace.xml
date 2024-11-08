@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3ceca8d1-12ab-4612-b9b3-18c72d9fd292" name="Changes" comment="Added gitignore file">
+    <list default="true" id="3ceca8d1-12ab-4612-b9b3-18c72d9fd292" name="Changes" comment="Sending email to gmail account&#10;&#10;- Now sends an email to my gmail account when motion is detected. &#10;&#10;- Uses a middle photo from the motion detection so it doesn't have the motion cropped out. &#10;&#10;- Learnt a new way to send emails using EmailMessage, which is actually a lot easier than the last way I was using. I will be using this from now on!">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/send_email.py" beforeDir="false" afterPath="$PROJECT_DIR$/send_email.py" afterDir="false" />
@@ -109,7 +109,15 @@
       <option name="project" value="LOCAL" />
       <updated>1731025470747</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Sending email to gmail account&#10;&#10;- Now sends an email to my gmail account when motion is detected. &#10;&#10;- Uses a middle photo from the motion detection so it doesn't have the motion cropped out. &#10;&#10;- Learnt a new way to send emails using EmailMessage, which is actually a lot easier than the last way I was using. I will be using this from now on!">
+      <option name="closed" value="true" />
+      <created>1731026109359</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1731026109359</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -118,6 +126,7 @@
     <MESSAGE value="Add date time to webcam screen" />
     <MESSAGE value="Removed file." />
     <MESSAGE value="Added gitignore file" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added gitignore file" />
+    <MESSAGE value="Sending email to gmail account&#10;&#10;- Now sends an email to my gmail account when motion is detected. &#10;&#10;- Uses a middle photo from the motion detection so it doesn't have the motion cropped out. &#10;&#10;- Learnt a new way to send emails using EmailMessage, which is actually a lot easier than the last way I was using. I will be using this from now on!" />
+    <option name="LAST_COMMIT_MESSAGE" value="Sending email to gmail account&#10;&#10;- Now sends an email to my gmail account when motion is detected. &#10;&#10;- Uses a middle photo from the motion detection so it doesn't have the motion cropped out. &#10;&#10;- Learnt a new way to send emails using EmailMessage, which is actually a lot easier than the last way I was using. I will be using this from now on!" />
   </component>
 </project>
